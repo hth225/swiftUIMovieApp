@@ -20,23 +20,24 @@ struct MovieCard: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .cornerRadius(8)
+                            .cornerRadius(4)
                             .overlay {
-                                ZStack(alignment: .center) {
-                                    Circle()
-                                        .fill(Color(red: 8/255, green: 28/255, blue: 34/255))
-                                    HStack(alignment: .center, spacing: 0) {
-                                        Text("\(Int(self.movie.voteAverage * 10))")
-                                            .font(.system(size: 24)).fontWeight(.medium)
-                                            .foregroundColor(.white)
-                                        Text("%")
-                                            .font(.system(size: 8)).fontWeight(.medium)
-                                            .foregroundColor(.white)
+                                GeometryReader { imageProxy in
+                                    ZStack(alignment: .center) {
+                                        Circle()
+                                            .fill(Color(red: 8/255, green: 28/255, blue: 34/255))
+                                        HStack(alignment: .center, spacing: 0) {
+                                            Text("\(Int(self.movie.voteAverage * 10))")
+                                                .font(.system(size: 24)).fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                            Text("%")
+                                                .font(.system(size: 8)).fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                        }
                                     }
+                                    .frame(width: 50, height: 50)
+                                    .offset(x: 8, y: imageProxy.size.height - 30)
                                 }
-                                .frame(width: 50, height: 50)
-                                .offset(x: (proxy.size.width - 120) / -2, y:proxy.size.width / 1.5)
-                                
                             }
                         
                     } else if phase.error != nil {
