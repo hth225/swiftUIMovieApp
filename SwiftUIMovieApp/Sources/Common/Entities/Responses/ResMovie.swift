@@ -1,5 +1,5 @@
 //
-//  Movie.swift
+//  ResMovie.swift
 //  SwiftUIMovieApp
 //
 //  Created by Jason Hwang on 2024/03/13.
@@ -8,12 +8,12 @@
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
 // To parse the JSON, add this file to your project and do:
 //
-//   let movie = try? JSONDecoder().decode(MovieInfo.self, from: jsonData)
+//   let resMovie = try? JSONDecoder().decode(ResMovie.self, from: jsonData)
 
 import Foundation
 
-// MARK: - MovieInfo
-struct Movie: Codable, Identifiable {
+// MARK: - ResMovie
+struct ResMovie: Codable, Identifiable, Equatable, Sendable {
     let adult: Bool
     let backdropPath: String
     let genreIDS: [Int]

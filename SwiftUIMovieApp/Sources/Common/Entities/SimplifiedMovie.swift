@@ -12,7 +12,7 @@
 
 import Foundation
 
-// MARK: - MovieInfo
+// MARK: - SimplifiedMovie
 struct SimplifiedMovie: Codable, Identifiable {
     let id: Int
     let posterPath, releaseDate, title: String

@@ -1,10 +1,13 @@
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct SwiftUIMovieAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PopularMoviesView(store: Store(initialState: PopularMoviesDomain.State()){
+                PopularMoviesDomain()
+            })
         }
     }
 }
