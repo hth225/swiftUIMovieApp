@@ -23,14 +23,34 @@ struct PopularMoviesView: View {
                                                          voteAverage: element.voteAverage))
                         .frame(width: geometryProxy.size.width / 2,
                                height: geometryProxy.size.height / 2)
-                    }
+                        .id(element.id)
+                        .task {
+                            // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
+                            if (element.id == store.checkPointID) {
+                                print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
+                                store.send(.fetchMovieList(store.currentPage+1, nil))
+                            }
+                        }
+                    }.scrollTargetLayout()
                 }
+                .background(GeometryReader {proxy in
+                    Color.clear
+                        .preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).origin)
+                })
             }
             .frame(width: geometryProxy.size.width, height: geometryProxy.size.height)
+            .coordinateSpace(name:"scroll")
         }
         .background(Color("Background"))
         .task {
             store.send(.fetchMovieList(store.currentPage+1, nil))
+        }
+    }
+    
+    struct ScrollOffsetPreferenceKey: PreferenceKey {
+        static var defaultValue: CGPoint = .zero
+
+        static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
         }
     }
 }

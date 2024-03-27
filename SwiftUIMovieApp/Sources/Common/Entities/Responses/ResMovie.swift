@@ -15,7 +15,7 @@ import Foundation
 // MARK: - ResMovie
 struct ResMovie: Codable, Identifiable, Equatable, Sendable {
     let adult: Bool
-    let backdropPath: String
+    let backdropPath: String?
     let genreIDS: [Int]
     let id: Int
     let originalLanguage, originalTitle, overview: String
