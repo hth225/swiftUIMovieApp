@@ -37,7 +37,7 @@ extension RootDomain {
     struct Path {
         @ObservableState
         enum State {
-            case popularMovieList(PopularMoviesDomain.State)
+            case popularMovieList(PopularMoviesDomain.State = .init())
         }
         
         enum Action {
