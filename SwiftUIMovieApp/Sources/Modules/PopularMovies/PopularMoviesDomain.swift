@@ -23,6 +23,7 @@ struct PopularMoviesDomain {
     enum Action {
         case fetchMovieList(Int, String?)
         case movieListResponse(Result<ResMovieList, Error>)
+        case movieDetailTapped(id: Int)
     }
     
     @Dependency(\.movieClient) var movieClient
@@ -46,6 +47,8 @@ struct PopularMoviesDomain {
                 return .none
             case let .movieListResponse(.failure(error)):
                 print("API Error:\(error)")
+                return .none
+            case let .movieDetailTapped(id):
                 return .none
             }
         }

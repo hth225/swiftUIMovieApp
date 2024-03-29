@@ -13,35 +13,45 @@ struct PopularMoviesView: View {
     
     var body: some View {
         GeometryReader { geometryProxy in
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())], alignment: .center, spacing: 4) {
-                    ForEach(store.movieList) { element in
-                        MovieCard(movie: SimplifiedMovie(id: element.id,
-                                                         posterPath: element.posterPath,
-                                                         releaseDate: element.releaseDate,
-                                                         title: element.title,
-                                                         voteAverage: element.voteAverage))
-                        .frame(width: geometryProxy.size.width / 2,
-                               height: geometryProxy.size.height / 2)
-                        .id(element.id)
-                        .task {
-                            // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
-                            if (element.id == store.checkPointID) {
-                                print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
-                                store.send(.fetchMovieList(store.currentPage+1, nil))
+            ZStack {
+                Color("Background")
+                    .ignoresSafeArea()
+                
+                VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())], alignment: .center, spacing: 4) {
+                        ForEach(store.movieList) { element in
+                            MovieCard(movie: SimplifiedMovie(id: element.id,
+                                                             posterPath: element.posterPath,
+                                                             releaseDate: element.releaseDate,
+                                                             title: element.title,
+                                                             voteAverage: element.voteAverage))
+                            .frame(width: geometryProxy.size.width / 2,
+                                   height: geometryProxy.size.height / 2)
+                            .id(element.id)
+                            .onTapGesture {
+                                store.send(.movieDetailTapped(id: element.id))
                             }
-                        }
-                    }.scrollTargetLayout()
+                            .task {
+                                // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
+                                if (element.id == store.checkPointID) {
+                                    print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
+                                    store.send(.fetchMovieList(store.currentPage+1, nil))
+                                }
+                            }
+                        }.scrollTargetLayout()
+                    }
+                    .background(GeometryReader {proxy in
+                        Color.clear
+                            .preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).origin)
+                    })
                 }
-                .background(GeometryReader {proxy in
-                    Color.clear
-                        .preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).origin)
-                })
+                .frame(width: geometryProxy.size.width, height: geometryProxy.size.height)
+                .coordinateSpace(name:"scroll")
             }
-            .frame(width: geometryProxy.size.width, height: geometryProxy.size.height)
-            .coordinateSpace(name:"scroll")
         }
-        .background(Color("Background"))
         .task {
             store.send(.fetchMovieList(store.currentPage+1, nil))
         }

@@ -13,14 +13,14 @@ struct RootView: View {
     
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            Text("Hello World")
+            NavigationLink("Popular movies", state: RootDomain.Path.State.popularMovieList(PopularMoviesDomain.State())).foregroundStyle(.black)
         }
         destination: { store in
-            switch store.state {
-            case .popularMovieList:
-                if let store = store.scope(state: \.popularMovieList, action: \.popularMovieList) {
-                    PopularMoviesView(store: store)
-                }
+            switch store.case {
+            case let .popularMovieList(store):
+                PopularMoviesView(store: store)
+            case let .movieDetail(store):
+                MovieDetailView(store: store)
             }
         }
     }

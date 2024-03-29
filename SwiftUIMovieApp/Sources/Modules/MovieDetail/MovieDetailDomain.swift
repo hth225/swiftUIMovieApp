@@ -12,7 +12,13 @@ import ComposableArchitecture
 struct MovieDetailDomain {
     @ObservableState
     struct State: Equatable {
-        var movieInfo: ResMovieDetail
+        var movieID: Int
+        var movieInfo: ResMovieDetail?
+        
+        init(movieID: Int, _ movieInfo: ResMovieDetail? = nil) {
+            self.movieID = movieID
+            self.movieInfo = movieInfo
+        }
     }
     
     enum Action {
