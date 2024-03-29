@@ -38,7 +38,7 @@ struct PopularMoviesView: View {
                                 // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
                                 if (element.id == store.checkPointID) {
                                     print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
-                                    store.send(.fetchMovieList(store.currentPage+1, nil))
+                                    store.send(.fetchMovieList(store.currentPage+1))
                                 }
                             }
                         }.scrollTargetLayout()
@@ -53,7 +53,7 @@ struct PopularMoviesView: View {
             }
         }
         .task {
-            store.send(.fetchMovieList(store.currentPage+1, nil))
+            store.send(.fetchMovieList(store.currentPage+1))
         }
     }
     

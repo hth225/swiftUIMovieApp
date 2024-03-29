@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 @Reducer
 struct PopularMoviesDomain {
+    @Dependency(\.movieClient) var movieClient
+    
     @ObservableState
     struct State: Equatable {
         var currentPage: Int = 0
@@ -21,20 +23,18 @@ struct PopularMoviesDomain {
     }
     
     enum Action {
-        case fetchMovieList(Int, String?)
+        case fetchMovieList(Int)
         case movieListResponse(Result<ResMovieList, Error>)
         case movieDetailTapped(id: Int)
     }
     
-    @Dependency(\.movieClient) var movieClient
-    
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case let .fetchMovieList(page, language):
+            case let .fetchMovieList(page):
                 return .run { send in
                     await send(.movieListResponse(Result {
-                        try await movieClient.getPopularMovies(reqMovieList: ReqMovieList(page: page, language: language))
+                        try await movieClient.getPopularMovies(reqMovieList: ReqMovieList(page: page, language: Locale.current.language.languageCode?.identifier))
                     }))
                 }
             case let .movieListResponse(.success(movieList)):

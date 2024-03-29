@@ -14,6 +14,7 @@ import Combine
 @DependencyClient
 struct MovieClient {
     var getPopularMovies: @Sendable (_ reqMovieList: ReqMovieList) async throws -> ResMovieList
+    var getMovieDetail: @Sendable (_ reqMovieDetail: ReqMovieDetail) async throws -> ResMovieDetail
 }
 
 extension MovieClient: DependencyKey {
@@ -21,6 +22,10 @@ extension MovieClient: DependencyKey {
         let provider = MoyaProvider<TmdbAPI>()
         
         return try await provider.request<ResMovieList>(.getPopularMovies(page: reqMovieList.page, language: reqMovieList.language))
+    }, getMovieDetail: {(reqMovieDetail) in
+        let provider = MoyaProvider<TmdbAPI>()
+        
+        return try await provider.request(.getMovieDetail(id: reqMovieDetail.movieID, reqMovieDetail.language))
     })
 }
 

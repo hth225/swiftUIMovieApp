@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 @Reducer
 struct MovieDetailDomain {
+    @Dependency(\.movieClient) var movieClient
+    
     @ObservableState
     struct State: Equatable {
         var movieID: Int
@@ -23,7 +25,7 @@ struct MovieDetailDomain {
     
     enum Action {
         case navigateBack
-        case fetchMovieDetail
+        case fetchMovieDetail(Int)
         case movieDetailResponse(Result<ResMovieDetail, Error>)
     }
     
@@ -31,14 +33,19 @@ struct MovieDetailDomain {
         Reduce { state, action in
             switch action {
             case .navigateBack:
-                // navigate pop action
                 return .none
-            case .fetchMovieDetail:
-//                return .run {
-//                    
-//                }
+            case .fetchMovieDetail(let id):
+                return .run { send in
+                    await send(.movieDetailResponse(Result {
+                        try await movieClient.getMovieDetail(reqMovieDetail: ReqMovieDetail(movieID: id, language: Locale.current.language.languageCode?.identifier))
+                    }))
+                }
+            case let .movieDetailResponse(.success(result)):
+                state.movieInfo = result
+                
                 return .none
-            case .movieDetailResponse:
+            case let .movieDetailResponse(.failure(error)):
+                print("API ERROR : \(error)")
                 return .none
             }
         }

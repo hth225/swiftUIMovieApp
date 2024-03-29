@@ -167,9 +167,9 @@ struct MovieDetailView: View {
                     .foregroundStyle(.black)
             }
         }
-        .onAppear(perform: {
-            print("Successfully landed ID:\(store.movieID)")
-        })
+        .task {
+            store.send(.fetchMovieDetail(store.movieID))
+        }
     }
     
 }
