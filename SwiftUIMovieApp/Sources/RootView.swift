@@ -12,17 +12,21 @@ struct RootView: View {
     @Bindable var store: StoreOf<RootDomain>
     
     var body: some View {
-        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            NavigationLink("Popular movies", state: RootDomain.Path.State.popularMovieList(PopularMoviesDomain.State())).foregroundStyle(.black)
-        }
-        destination: { store in
-            switch store.case {
-            case let .popularMovieList(store):
-                PopularMoviesView(store: store)
-            case let .movieDetail(store):
-                MovieDetailView(store: store)
+        
+        //            NavigationLink("Popular movies", state: RootDomain.Path.State.popularMovieList(PopularMoviesDomain.State())).foregroundStyle(.black)
+        TabView {
+            Group {
+                PopularMoviesView(store: Store(initialState: PopularMoviesDomain.State()){
+                    PopularMoviesDomain()
+                })
+                .tabItem {
+                    Image(systemName: "movieclapper")
+                    Text("Movies")
+                }
             }
+            .toolbarBackground(Color("TabbarBackground"), for: .tabBar)
         }
+        
     }
 }
 

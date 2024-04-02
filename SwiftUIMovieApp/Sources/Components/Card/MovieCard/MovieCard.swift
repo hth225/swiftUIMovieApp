@@ -56,6 +56,7 @@ struct MovieCard: View {
                 
                 Text(self.movie.title)
                     .font(.system(.title2)).fontWeight(.bold)
+                    .multilineTextAlignment(.leading)
                     .padding(.bottom, 2)
                     .padding(.leading, 8)
                 Text(dateConverter(self.movie.releaseDate))

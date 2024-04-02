@@ -43,6 +43,8 @@ struct MovieDetailView: View {
                                     // Display a placeholder when loading failed
                                     Image(systemName: "questionmark.diamond")
                                         .imageScale(.large)
+                                        .frame(width: proxy.size.width - 40,
+                                               height: (proxy.size.width - 40) * 1.5)
                                 } else {
                                     // Display a placeholder while loading
                                     // size - padding
@@ -55,12 +57,9 @@ struct MovieDetailView: View {
                             
                             // title, average rate
                             HStack{
-                                VStack(alignment: .leading) {
-                                    // title
-                                    Text("\(movieInfo.title) ")
-                                        .font(.largeTitle).fontWeight(.heavy)
-                                    
-                                }
+                                // title
+                                Text("\(movieInfo.title) ")
+                                    .font(.largeTitle).fontWeight(.heavy)
                                 Spacer()
                                 ZStack(alignment: .center) {
                                     Circle()
@@ -134,22 +133,27 @@ struct MovieDetailView: View {
                                 .padding(.top, 16)
                             HStack {
                                 ForEach(movieInfo.productionCompanies) { element in
-                                    AsyncImage(url: URL(string: MovieImageHelper.getURL(path: element.logoPath))) { phase in
-                                        if let image = phase.image {
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .cornerRadius(4)
-                                        } else if phase.error != nil {
-                                            // Display a placeholder when loading failed
-                                            Image(systemName: "questionmark.diamond")
-                                                .imageScale(.large)
-                                        } else {
-                                            // Display a placeholder while loading
-                                            // size - padding
-                                            ProgressView()
-                                                .frame(width: 36,
-                                                       height: 36)
+                                    if let path = element.logoPath {
+                                        AsyncImage(url: URL(string: MovieImageHelper.getURL(path: path))) { phase in
+                                            if let image = phase.image {
+                                                image
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(height: 120)
+                                                    .cornerRadius(4)
+                                            } else if phase.error != nil {
+                                                // Display a placeholder when loading failed
+                                                Image(systemName: "questionmark.diamond")
+                                                    .imageScale(.large)
+                                                    .frame(width: 36,
+                                                           height: 36)
+                                            } else {
+                                                // Display a placeholder while loading
+                                                // size - padding
+                                                ProgressView()
+                                                    .frame(width: 36,
+                                                           height: 36)
+                                            }
                                         }
                                     }
                                 }
@@ -167,6 +171,12 @@ struct MovieDetailView: View {
                     .foregroundStyle(.black)
             }
         }
+//        .navigationTitle {
+//            Text("\(store.movieInfo?.title) ")
+//                .font(.largeTitle).fontWeight(.heavy)
+//        }
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
         .task {
             store.send(.fetchMovieDetail(store.movieID))
         }

@@ -12,46 +12,58 @@ struct PopularMoviesView: View {
     @Bindable var store: StoreOf<PopularMoviesDomain>
     
     var body: some View {
-        GeometryReader { geometryProxy in
-            ZStack {
-                Color("Background")
-                    .ignoresSafeArea()
-                
-                VisualEffectView(effect: UIBlurEffect(style: .dark))
-                    .ignoresSafeArea()
-                
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())], alignment: .center, spacing: 4) {
-                        ForEach(store.movieList) { element in
-                            MovieCard(movie: SimplifiedMovie(id: element.id,
-                                                             posterPath: element.posterPath,
-                                                             releaseDate: element.releaseDate,
-                                                             title: element.title,
-                                                             voteAverage: element.voteAverage))
-                            .frame(width: geometryProxy.size.width / 2,
-                                   height: geometryProxy.size.height / 2)
-                            .id(element.id)
-                            .onTapGesture {
-                                store.send(.movieDetailTapped(id: element.id))
-                            }
-                            .task {
-                                // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
-                                if (element.id == store.checkPointID) {
-                                    print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
-                                    store.send(.fetchMovieList(store.currentPage+1))
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            GeometryReader { geometryProxy in
+                ZStack {
+                    Color("Background")
+                        .ignoresSafeArea()
+                    
+                    VisualEffectView(effect: UIBlurEffect(style: .dark))
+                        .ignoresSafeArea()
+                    
+                    
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())], alignment: .center, spacing: 4) {
+                            ForEach(store.movieList) { element in
+                                NavigationLink(state: PopularMoviesDomain.Path.State.movieDetail(MovieDetailDomain.State(movieID: element.id))) {
+                                    MovieCard(movie: SimplifiedMovie(id: element.id,
+                                                                     posterPath: element.posterPath,
+                                                                     releaseDate: element.releaseDate,
+                                                                     title: element.title,
+                                                                     voteAverage: element.voteAverage))
+                                    .frame(width: geometryProxy.size.width / 2,
+                                           height: geometryProxy.size.height / 2)
+                                    .id(element.id)
+                                    .onTapGesture {
+                                        store.send(.movieDetailTapped(id: element.id))
+                                    }
+                                    .task {
+                                        // ResMovie의 첫번째 Element 가 보일때 다음 페이지 가져오기
+                                        if (element.id == store.checkPointID) {
+                                            print("Requested: \(element.id), CheckPoint:\(String(describing: store.checkPointID))")
+                                            store.send(.fetchMovieList(store.currentPage+1))
+                                        }
+                                    }
                                 }
-                            }
-                        }.scrollTargetLayout()
+                            }.scrollTargetLayout()
+                        }
+                        .background(GeometryReader {proxy in
+                            Color.clear
+                                .preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).origin)
+                        })
                     }
-                    .background(GeometryReader {proxy in
-                        Color.clear
-                            .preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).origin)
-                    })
+                    .frame(width: geometryProxy.size.width, height: geometryProxy.size.height)
+                    .coordinateSpace(name:"scroll")
+                    
                 }
-                .frame(width: geometryProxy.size.width, height: geometryProxy.size.height)
-                .coordinateSpace(name:"scroll")
+            }
+        }destination: { store in
+            switch store.case {
+            case let .movieDetail(store):
+                MovieDetailView(store: store)
             }
         }
+        .tint(.white)
         .task {
             store.send(.fetchMovieList(store.currentPage+1))
         }
@@ -59,7 +71,7 @@ struct PopularMoviesView: View {
     
     struct ScrollOffsetPreferenceKey: PreferenceKey {
         static var defaultValue: CGPoint = .zero
-
+        
         static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
         }
     }

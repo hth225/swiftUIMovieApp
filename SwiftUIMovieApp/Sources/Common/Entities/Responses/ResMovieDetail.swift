@@ -81,7 +81,8 @@ struct Genre: Codable, Identifiable {
 // MARK: - ProductionCompany
 struct ProductionCompany: Codable, Identifiable {
     let id: Int
-    let logoPath, name, originCountry: String
+    let logoPath: String?
+    let name, originCountry: String
 
     enum CodingKeys: String, CodingKey {
         case id
