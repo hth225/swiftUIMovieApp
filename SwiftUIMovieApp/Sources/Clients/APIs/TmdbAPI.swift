@@ -12,6 +12,7 @@ import Moya
 enum TmdbAPI {
     case getPopularMovies(page: Int, language: String?)
     case getMovieDetail(id: Int, _ language: String?)
+    case getPopularTV(page: Int, language: String?)
 }
 
 extension TmdbAPI: TargetType {
@@ -23,12 +24,13 @@ extension TmdbAPI: TargetType {
         switch self {
         case .getPopularMovies(page: _, language: _) : return Constants.popluarMovieURL
         case .getMovieDetail(id: let movieID, _): return Constants.movieDetailURL(movieID: movieID)
+        case .getPopularTV(page: _, language: _): return Constants.popluarTVURL
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getPopularMovies(page: _), .getMovieDetail(id: _, _) : return .get
+        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _) : return .get
         }
     }
     
@@ -40,12 +42,15 @@ extension TmdbAPI: TargetType {
         case .getMovieDetail(id: let id, let language):
             let params : [String: String] = ["language" : language ?? "en-US"]
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
+        case .getPopularTV(page: let id, language: let language):
+            let params : [String: String] = ["page" : String(id), "language" : language ?? "en-US" ]
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .getPopularMovies(page: _), .getMovieDetail(id: _, _) :
+        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _):
             return [ "Authorization" : Constants.apiKey, "accept" : "application/json" ]
         }
     }
