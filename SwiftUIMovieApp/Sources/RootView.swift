@@ -23,6 +23,14 @@ struct RootView: View {
                     Image(systemName: "movieclapper")
                     Text("Movies")
                 }
+                
+                PopularTVsView(store: Store(initialState: PopularTVsDomain.State()){
+                    PopularTVsDomain()
+                })
+                .tabItem {
+                    Image(systemName: "play.tv.fill")
+                    Text("TV")
+                }
             }
             .toolbarBackground(Color("TabbarBackground"), for: .tabBar)
         }

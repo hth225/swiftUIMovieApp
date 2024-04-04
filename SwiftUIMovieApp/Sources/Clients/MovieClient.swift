@@ -8,14 +8,11 @@
 import Foundation
 import ComposableArchitecture
 import Moya
-import CombineMoya
-import Combine
 
 @DependencyClient
 struct MovieClient {
     var getPopularMovies: @Sendable (_ reqMovieList: ReqMovieList) async throws -> ResMovieList
     var getMovieDetail: @Sendable (_ reqMovieDetail: ReqMovieDetail) async throws -> ResMovieDetail
-    var getPopularTVs: @Sendable (_ reqTVList: ReqTVList) async throws -> ResTVList
 }
 
 extension MovieClient: DependencyKey {
@@ -27,10 +24,6 @@ extension MovieClient: DependencyKey {
         let provider = MoyaProvider<TmdbAPI>()
         
         return try await provider.request(.getMovieDetail(id: reqMovieDetail.movieID, reqMovieDetail.language))
-    }, getPopularTVs: { (reqTVList) in
-        let provider = MoyaProvider<TmdbAPI>()
-        
-        return try await provider.request(.getPopularTV(page: reqTVList.page, language: reqTVList.language))
     } )
 }
 
@@ -39,24 +32,4 @@ extension DependencyValues {
     get { self[MovieClient.self] }
     set { self[MovieClient.self] = newValue }
   }
-}
-
-extension MoyaProvider {
-    func request<T: Decodable>(_ target: Target) async throws -> T {
-        return try await withCheckedThrowingContinuation { continuation in
-            self.request(target) { result in
-                switch result {
-                case .success(let response):
-                    do {
-                        let res = try JSONDecoder().decode(T.self, from: response.data)
-                        continuation.resume(returning: res)
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
 }

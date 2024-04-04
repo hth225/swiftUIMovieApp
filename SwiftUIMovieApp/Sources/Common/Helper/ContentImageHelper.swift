@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieImageHelper {
+struct ContentImageHelper {
     static func getURL(_ imageWidth: Int? = nil, path: String) -> String {
         if let size = imageWidth {
             return "\(Constants.imageURL)/w\(String(size))\(path)"

@@ -14,7 +14,7 @@ struct MovieCard: View {
     var body: some View {
         GeometryReader { proxy in
             VStack(alignment: .leading) {
-                AsyncImage(url:URL(string:  MovieImageHelper.getURL(path: self.movie.posterPath))) { phase in
+                AsyncImage(url:URL(string:  ContentImageHelper.getURL(path: self.movie.posterPath))) { phase in
                     if let image = phase.image {
                         // Display the loaded image
                         image

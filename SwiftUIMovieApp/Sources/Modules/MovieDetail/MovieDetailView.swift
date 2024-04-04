@@ -16,7 +16,7 @@ struct MovieDetailView: View {
             if let movieInfo = store.movieInfo {
                 ZStack {
                     if let backdrop = movieInfo.backdropPath {
-                        AsyncImage(url: URL(string: MovieImageHelper.getURL(path: backdrop))) { phase in
+                        AsyncImage(url: URL(string: ContentImageHelper.getURL(path: backdrop))) { phase in
                             if let image = phase.image {
                                 image
                                     .resizable()
@@ -33,7 +33,7 @@ struct MovieDetailView: View {
                     
                     ScrollView {
                         VStack(alignment: .leading){
-                            AsyncImage(url: URL(string: MovieImageHelper.getURL(path: movieInfo.posterPath))) { phase in
+                            AsyncImage(url: URL(string: ContentImageHelper.getURL(path: movieInfo.posterPath))) { phase in
                                 if let image = phase.image {
                                     image
                                         .resizable()
@@ -134,7 +134,7 @@ struct MovieDetailView: View {
                             HStack {
                                 ForEach(movieInfo.productionCompanies) { element in
                                     if let path = element.logoPath {
-                                        AsyncImage(url: URL(string: MovieImageHelper.getURL(path: path))) { phase in
+                                        AsyncImage(url: URL(string: ContentImageHelper.getURL(path: path))) { phase in
                                             if let image = phase.image {
                                                 image
                                                     .resizable()

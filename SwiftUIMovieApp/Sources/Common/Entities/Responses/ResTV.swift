@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ResTV
-struct ResTV: Codable {
+struct ResTV: Codable, Identifiable, Equatable, Sendable {
     let adult: Bool
     let backdropPath: String?
     let genreIDS: [Int]

@@ -14,7 +14,7 @@ struct MovieCollectionCard: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(collection.name)
                 .font(.title2).fontWeight(.medium)
-            AsyncImage(url: URL(string: MovieImageHelper.getURL(path: collection.posterPath))) { phase in
+            AsyncImage(url: URL(string: ContentImageHelper.getURL(path: collection.posterPath))) { phase in
                 if let image = phase.image {
                     image
                         .resizable()
