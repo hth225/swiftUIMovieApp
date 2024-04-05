@@ -15,7 +15,8 @@ import Foundation
 struct EpisodeInfo: Codable {
     let id: Int
     let name, overview: String
-    let voteAverage, voteCount: Int
+    let voteAverage: Double
+    let voteCount: Int
     let airDate: String
     let episodeNumber: Int
     let episodeType, productionCode: String

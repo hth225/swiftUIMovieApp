@@ -31,8 +31,8 @@ struct TVShowDetailView: View {
                                     // Display a placeholder while loading
                                     // size - padding
                                     ProgressView()
-                                        .frame(width: proxy.size.width,
-                                               height: proxy.size.height)
+                                        .frame(width: proxy.size.width - 40,
+                                               height: proxy.size.height / 2)
                                 }
                             }
                             
@@ -133,7 +133,7 @@ struct TVShowDetailView: View {
                                     .font(.title).fontWeight(.bold)
                                     .padding(.top, 16)
                                 ScrollView(.horizontal){
-                                    HStack{
+                                    HStack(alignment: .top){
                                         ForEach(info.productionCompanies) { element in
                                             VStack{
                                                 if let posterPath = element.logoPath {
