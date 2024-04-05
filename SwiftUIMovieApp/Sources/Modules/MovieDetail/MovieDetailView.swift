@@ -96,7 +96,7 @@ struct MovieDetailView: View {
                                 .padding(.bottom, 12)
                             
                             if let movieCollection = movieInfo.belongsToCollection {
-                                Text("Collections")
+                                Text("MovieDetailTextCollections")
                                     .font(.title).fontWeight(.bold)
                                     .padding(.bottom, 8)
                                 MovieCollectionCard(collection: movieCollection)
@@ -104,10 +104,10 @@ struct MovieDetailView: View {
                             }
                             
                             Divider()
-                            Text("Learn more")
+                            Text("MovieDetailTextLearnMore")
                                 .font(.title).fontWeight(.bold)
                                 .padding(.bottom, 8)
-                            Text("Original title")
+                            Text("MovieDetailTextOriginalTitle")
                                 .title2()
                             HStack{
                                 Text(movieInfo.originalTitle)
@@ -118,17 +118,17 @@ struct MovieDetailView: View {
                                     .fontWeight(.medium)
                             }
                             
-                            Text("Budget")
+                            Text("MovieDetailTextBudget")
                                 .title2()
                             Text("\(movieInfo.budget.formatted(.currency(code: "USD")))")
                                 .font(.body).fontWeight(.bold)
                             
-                            Text("Revenue")
+                            Text("MovieDetailTextRevenue")
                                 .title2()
                             Text("\(movieInfo.revenue.formatted(.currency(code: "USD")))")
                                 .font(.body).fontWeight(.bold)
                             
-                            Text("Production company")
+                            Text("MovieDetailTextProductionCompany")
                                 .font(.title).fontWeight(.bold)
                                 .padding(.top, 16)
                             HStack {
