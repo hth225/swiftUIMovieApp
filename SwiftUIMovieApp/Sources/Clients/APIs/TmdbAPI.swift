@@ -13,6 +13,7 @@ enum TmdbAPI {
     case getPopularMovies(page: Int, language: String?)
     case getMovieDetail(id: Int, _ language: String?)
     case getPopularTV(page: Int, language: String?)
+    case getTVShowDetail(id: Int, _ language: String?)
 }
 
 extension TmdbAPI: TargetType {
@@ -25,12 +26,13 @@ extension TmdbAPI: TargetType {
         case .getPopularMovies(page: _, language: _) : return Constants.popluarMovieURL
         case .getMovieDetail(id: let movieID, _): return Constants.movieDetailURL(movieID: movieID)
         case .getPopularTV(page: _, language: _): return Constants.popluarTVURL
+        case .getTVShowDetail(id: let showID, _): return Constants.tvShowDetailURL(showID: showID)
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _) : return .get
+        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _), .getTVShowDetail(id: _, _) : return .get
         }
     }
     
@@ -39,7 +41,7 @@ extension TmdbAPI: TargetType {
         case .getPopularMovies(page: let page, language: let language) :
             let params : [String: String] = [ "page" : String(page), "language" : language ?? "en-US" ]
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
-        case .getMovieDetail(id: let id, let language):
+        case .getMovieDetail(id: _, let language), .getTVShowDetail(id: _, let language):
             let params : [String: String] = ["language" : language ?? "en-US"]
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
         case .getPopularTV(page: let id, language: let language):
@@ -50,7 +52,7 @@ extension TmdbAPI: TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _):
+        case .getPopularMovies(page: _), .getMovieDetail(id: _, _), .getPopularTV(page: _, language: _), .getTVShowDetail(id: _, _):
             return [ "Authorization" : Constants.apiKey, "accept" : "application/json" ]
         }
     }
