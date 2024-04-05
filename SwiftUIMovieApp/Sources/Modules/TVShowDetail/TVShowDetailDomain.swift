@@ -14,12 +14,37 @@ struct TVShowDetailDomain {
     
     @ObservableState
     struct State: Equatable {
-        var id: Int
+        var showID: Int
         var info: ResTVShowDetail?
         
-        init(id: Int, info: ResTVShowDetail? = nil) {
-            self.id = id
+        init(showID: Int, _ info: ResTVShowDetail? = nil) {
+            self.showID = showID
             self.info = info
+        }
+    }
+    
+    enum Action {
+        case fetchShowDetail(Int)
+        case fetchResponse(Result<ResTVShowDetail, Error>)
+    }
+    
+    var body: some Reducer<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case.fetchShowDetail(let id):
+                return .run { send in
+                    await send(.fetchResponse(Result{
+                        try await tvClient.getTVShowDetail(reqTVShowDetail: ReqTVShowDetail(showID: id, language: Locale.current.language.languageCode?.identifier))
+                    }))
+                }
+            case let .fetchResponse(.success(result)):
+                state.info = result
+                return .none
+            case let .fetchResponse(.failure(error)):
+                print("API ERROR : \(error)")
+                return .none
+            }
+            
         }
     }
 }

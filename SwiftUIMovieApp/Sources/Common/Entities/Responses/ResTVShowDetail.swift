@@ -12,7 +12,7 @@
 import Foundation
 
 // MARK: - ResTVShowDetail
-struct ResTVShowDetail: Codable {
+struct ResTVShowDetail: Codable, Identifiable, Equatable, Sendable{
     let adult: Bool
     let backdropPath: String?
     let createdBy: [CreatedBy]
@@ -69,6 +69,10 @@ struct ResTVShowDetail: Codable {
         case status, tagline, type
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+    }
+    
+    static func == (lhs: ResTVShowDetail, rhs: ResTVShowDetail) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
