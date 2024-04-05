@@ -120,9 +120,11 @@ struct TVShowDetailView: View {
                                             TVSeasonsCard(seasons: element)
                                         }
                                     }
+                                    .padding(.horizontal)
                                 }
                                 .scrollIndicators(.hidden)
                                 .padding(.bottom, 8)
+                                .padding(.horizontal, -16)
                             }
                             
                             // production company
