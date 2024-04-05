@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentImage: View {
     let posterPath: String
-    let voteAverage: Double
+    let voteAverage: Double?
     
-    init(posterPath: String, voteAverage: Double) {
+    init(posterPath: String, voteAverage: Double?) {
         self.posterPath = posterPath
         self.voteAverage = voteAverage
     }
@@ -25,21 +25,23 @@ struct ContentImage: View {
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(4)
                         .overlay {
-                            GeometryReader { imageProxy in
-                                ZStack(alignment: .center) {
-                                    Circle()
-                                        .fill(Color(red: 8/255, green: 28/255, blue: 34/255))
-                                    HStack(alignment: .center, spacing: 0) {
-                                        Text("\(Int(voteAverage * 10))")
-                                            .font(.system(size: 24)).fontWeight(.medium)
-                                            .foregroundColor(.white)
-                                        Text("%")
-                                            .font(.system(size: 8)).fontWeight(.medium)
-                                            .foregroundColor(.white)
+                            if let average = voteAverage {
+                                GeometryReader { imageProxy in
+                                    ZStack(alignment: .center) {
+                                        Circle()
+                                            .fill(Color(red: 8/255, green: 28/255, blue: 34/255))
+                                        HStack(alignment: .center, spacing: 0) {
+                                            Text("\(Int(average * 10))")
+                                                .font(.system(size: 24)).fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                            Text("%")
+                                                .font(.system(size: 8)).fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                        }
                                     }
+                                    .frame(width: 50, height: 50)
+                                    .offset(x: 8, y: imageProxy.size.height - 30)
                                 }
-                                .frame(width: 50, height: 50)
-                                .offset(x: 8, y: imageProxy.size.height - 30)
                             }
                         }
                 } else if phase.error != nil {

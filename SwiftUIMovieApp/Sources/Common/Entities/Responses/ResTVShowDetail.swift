@@ -81,7 +81,7 @@ struct CreatedBy: Codable {
     let id: Int
     let creditID, name: String
     let gender: Int
-    let profilePath: String
+    let profilePath: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -135,7 +135,7 @@ struct Network: Codable {
 
 // MARK: - Season
 struct Season: Codable {
-    let airDate: String
+    let airDate: String?
     let episodeCount, id: Int
     let name, overview, posterPath: String
     let seasonNumber: Int
