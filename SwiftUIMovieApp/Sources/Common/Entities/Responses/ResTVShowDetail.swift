@@ -24,9 +24,9 @@ struct ResTVShowDetail: Codable, Identifiable, Equatable, Sendable{
     let inProduction: Bool
     let languages: [String]
     let lastAirDate: String
-    let lastEpisodeToAir: LastEpisodeToAir
+    let lastEpisodeToAir: EpisodeInfo?
     let name: String
-    let nextEpisodeToAir: String?
+    let nextEpisodeToAir: EpisodeInfo?
     let networks: [Network]
     let numberOfEpisodes, numberOfSeasons: Int
     let originCountry: [String]
@@ -77,7 +77,7 @@ struct ResTVShowDetail: Codable, Identifiable, Equatable, Sendable{
 }
 
 // MARK: - CreatedBy
-struct CreatedBy: Codable {
+struct CreatedBy: Codable, Identifiable {
     let id: Int
     let creditID, name: String
     let gender: Int
@@ -91,36 +91,8 @@ struct CreatedBy: Codable {
     }
 }
 
-
-
-// MARK: - LastEpisodeToAir
-struct LastEpisodeToAir: Codable {
-    let id: Int
-    let name, overview: String
-    let voteAverage, voteCount: Int
-    let airDate: String
-    let episodeNumber: Int
-    let episodeType, productionCode: String
-    let runtime, seasonNumber, showID: Int
-    let stillPath: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id, name, overview
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
-        case airDate = "air_date"
-        case episodeNumber = "episode_number"
-        case episodeType = "episode_type"
-        case productionCode = "production_code"
-        case runtime
-        case seasonNumber = "season_number"
-        case showID = "show_id"
-        case stillPath = "still_path"
-    }
-}
-
 // MARK: - Network
-struct Network: Codable {
+struct Network: Codable, Identifiable {
     let id: Int
     let logoPath: String?
     let name, originCountry: String
@@ -134,10 +106,11 @@ struct Network: Codable {
 }
 
 // MARK: - Season
-struct Season: Codable {
+struct Season: Codable, Identifiable {
     let airDate: String?
     let episodeCount, id: Int
-    let name, overview, posterPath: String
+    let name, overview: String
+    let posterPath: String?
     let seasonNumber: Int
     let voteAverage: Double
 

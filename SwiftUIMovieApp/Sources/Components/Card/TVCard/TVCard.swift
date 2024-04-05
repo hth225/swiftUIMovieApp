@@ -18,11 +18,11 @@ struct TVCard: View {
 //                    .frame(width: proxy.size.width, height: proxy.size.height)
                 
                 Text(info.name)
-                    .font(.system(.title2)).fontWeight(.bold)
+                    .font(.system(.title3)).fontWeight(.bold)
                     .multilineTextAlignment(.leading)
                     .padding(.bottom, 2)
                     .padding(.leading, 8)
-                    .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
+                    .lineLimit(3, reservesSpace: true)
                     .truncationMode(.tail)
                 Text(dateConverter(info.firstAirDate))
                     .font(.system(size: 16))

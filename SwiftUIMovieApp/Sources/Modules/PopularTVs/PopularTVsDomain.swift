@@ -14,7 +14,7 @@ struct PopularTVsDomain {
     
     @Reducer(state: .equatable)
     enum Path {
-//        case navigateToTVDetail(TVDetailDomain)
+        case navigateToTVDetail(TVShowDetailDomain)
     }
     
     @ObservableState
@@ -25,14 +25,15 @@ struct PopularTVsDomain {
         var checkPointID: Int?
         // 중복 호출 방지. checkPointID 와 이 리스트로 교차검증해서 api call 함
         var requestedIDList: [Int] = []
-//                var path = StackState<Path.State>()
+
+        var path = StackState<Path.State>()
     }
     
     enum Action {
         case fetchTVList(Int)
         case tvListResponse(Result<ResTVList, Error>)
         case tvDetailTapped(Int)
-//                case path(StackAction<Path.State, Path.Action>)
+        case path(StackAction<Path.State, Path.Action>)
     }
     
     var body: some Reducer<State, Action> {
@@ -55,11 +56,13 @@ struct PopularTVsDomain {
                 print("API Error:\(error)")
                 return .none
             case let .tvDetailTapped(id):
-//                state.path.append(.navigateToTVDetail(TVDetailDomain.State(id: id)))
+                state.path.append(.navigateToTVDetail(TVShowDetailDomain.State(showID: id)))
+                return .none
+            case let .path(action):
                 return .none
             }
             
         }
-//        .forEach(\.path, action: \.path)
+        .forEach(\.path, action: \.path)
     }
 }

@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    " - " : {
+
+    },
     "(%@)" : {
 
     },
@@ -86,7 +89,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "원제목"
+            "value" : "원제"
           }
         }
       }
@@ -157,6 +160,22 @@
         }
       }
     },
+    "TVShowDetailTextCreatedBy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Created by"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제작"
+          }
+        }
+      }
+    },
     "TVShowDetailTextLearnMore" : {
       "localizations" : {
         "en" : {
@@ -173,8 +192,7 @@
         }
       }
     },
-    "TVShowDetailTextOriginalText" : {
-      "extractionState" : "stale",
+    "TVShowDetailTextOriginalTitle" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -184,14 +202,11 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "원제목"
+            "state" : "needs_review",
+            "value" : "원제"
           }
         }
       }
-    },
-    "TVShowDetailTextOriginalTitle" : {
-
     },
     "TVShowDetailTextProductionCompany" : {
       "localizations" : {
@@ -205,6 +220,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "제작사"
+          }
+        }
+      }
+    },
+    "TVShowDetailTextSeasons" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seasons"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시즌"
           }
         }
       }

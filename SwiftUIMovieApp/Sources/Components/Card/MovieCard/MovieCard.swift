@@ -54,12 +54,13 @@ struct MovieCard: View {
                 }
                 .padding(.bottom, 12)
                 
-                Text(self.movie.title)
+                Text(movie.title)
                     .font(.system(.title2)).fontWeight(.bold)
                     .multilineTextAlignment(.leading)
+                    .lineLimit(2, reservesSpace: true)
                     .padding(.bottom, 2)
                     .padding(.leading, 8)
-                Text(dateConverter(self.movie.releaseDate))
+                Text(dateConverter(movie.releaseDate))
                     .font(.system(size: 16))
                     .padding(.leading, 8)
             }

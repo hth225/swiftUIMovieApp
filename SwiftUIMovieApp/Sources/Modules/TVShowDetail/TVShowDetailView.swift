@@ -17,8 +17,24 @@ struct TVShowDetailView: View {
                 BlurredImageBackground(imageURL: info.backdropPath) {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            // voteAverage nil 주어서 뱃지 비활성화
-                            ContentImage(posterPath: info.posterPath, voteAverage: nil)
+                            AsyncImage(url: URL(string: ContentImageHelper.getURL(path: info.posterPath))) { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .cornerRadius(4)
+                                } else if phase.error != nil {
+                                    // Display a placeholder when loading failed
+                                    Image(systemName: "questionmark.diamond")
+                                        .imageScale(.large)
+                                } else {
+                                    // Display a placeholder while loading
+                                    // size - padding
+                                    ProgressView()
+                                        .frame(width: proxy.size.width,
+                                               height: proxy.size.height)
+                                }
+                            }
                             
                             HStack {
                                 Text(info.name)
@@ -59,7 +75,6 @@ struct TVShowDetailView: View {
                                 .font(.system(size: 16)).fontWeight(.medium)
                                 .padding(.bottom, 12)
                             
-                            // created by
                             
                             Divider()
                             Text("TVShowDetailTextLearnMore")
@@ -76,15 +91,93 @@ struct TVShowDetailView: View {
                                 Text("(\(info.productionCountries.map({element in element.iso3166_1}).joined(separator: ", ")))")
                                     .font(.title3)
                                     .fontWeight(.medium)
+                            }.padding(.bottom, 4)
+                            
+                            // created by
+                            if !info.createdBy.isEmpty {
+                                Text("TVShowDetailTextCreatedBy")
+                                    .title2()
+                                    .padding(.bottom, 4)
+                                ScrollView(.horizontal){
+                                    HStack{
+                                        ForEach(info.createdBy) { element in
+                                            ShowDirectorCard(director: element)
+                                        }
+                                    }
+                                }
+                                .scrollIndicators(.hidden)
+                                .padding(.bottom, 8)
                             }
                             
                             // seasons
+                            if !info.seasons.isEmpty {
+                                Text("TVShowDetailTextSeasons")
+                                    .title2()
+                                    .padding(.bottom, 4)
+                                ScrollView(.horizontal){
+                                    HStack{
+                                        ForEach(info.seasons) { element in
+                                            TVSeasonsCard(seasons: element)
+                                        }
+                                    }
+                                }
+                                .scrollIndicators(.hidden)
+                                .padding(.bottom, 8)
+                            }
                             
                             // production company
-                            Text("TVShowDetailTextProductionCompany")
-                                .font(.title).fontWeight(.bold)
-                                .padding(.top, 16)
-                            
+                            if !info.productionCompanies.isEmpty {
+                                Text("TVShowDetailTextProductionCompany")
+                                    .font(.title).fontWeight(.bold)
+                                    .padding(.top, 16)
+                                ScrollView(.horizontal){
+                                    HStack{
+                                        ForEach(info.productionCompanies) { element in
+                                            VStack{
+                                                if let posterPath = element.logoPath {
+                                                    AsyncImage(url: URL(string: ContentImageHelper.getURL(path: posterPath))) { phase in
+                                                        if let image = phase.image {
+                                                            image
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fit)
+                                                                .frame(width: 150,
+                                                                       height: 200)
+                                                                .cornerRadius(4)
+                                                        } else if phase.error != nil {
+                                                            // Display a placeholder when loading failed
+                                                            Image(systemName: "questionmark.diamond")
+                                                                .imageScale(.large)
+                                                        } else {
+                                                            // Display a placeholder while loading
+                                                            // size - padding
+                                                            ProgressView()
+                                                                .frame(width: 150,
+                                                                       height: 200)
+                                                        }
+                                                    }
+                                                } else {
+                                                    Image(systemName: "play.tv")
+                                                        .frame(width: 150,
+                                                               height: 200)
+                                                        .foregroundStyle(.white)
+                                                        .background(.gray)
+                                                        .cornerRadius(4)
+                                                }
+                                                
+                                                Text(element.name)
+                                                    .font(.title3).fontWeight(.bold)
+                                                    .frame(width: 150)
+                                                    .padding(.vertical, 4)
+                                            }
+                                            .padding(.horizontal, 2)
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                .scrollIndicators(.hidden)
+                                .padding(.bottom, 8)
+                                .padding(.horizontal, -16)
+                            }
                         }
                         .padding(.horizontal)
                     }
